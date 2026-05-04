@@ -7,13 +7,9 @@ End-to-end Machine Learning project for predicting Olympic medal outcomes
 <img src="https://img.shields.io/badge/Status-Active-success?style=for-the-badge">
 </p>
 
-🎯 Project Overview
-این پروژه یک سیستم کامل Machine Learning برای پیش‌بینی مدال‌های المپیک است.
-از داده‌خام تا مدل نهایی، همه‌چیز در یک ساختار حرفه‌ای و قابل‌استفاده برای رزومه و GitHub آماده شده.
+🎯 Project Overviewه.
 
-📊 Demo Preview (GIF پیشنهادی)
-(اگر خواستی، برایت یک GIF واقعی از داشبورد می‌سازم)
-
+📊 Demo Preview
 <p align="center">
 <img src="https://raw.githubusercontent.com/placeholder/demo.gif" width="650">
 </p>

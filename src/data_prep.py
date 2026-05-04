@@ -17,7 +17,7 @@ import os
 import pandas as pd
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
-ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "dataset"))
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "data"))
 CLEAN_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "cleaned"))
 os.makedirs(CLEAN_DIR, exist_ok=True)
 

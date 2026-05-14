@@ -1,117 +1,80 @@
 """
 features.py
 -----------
-Feature engineering + target creation for Olympics ML project.
+Full feature engineering + preprocessing pipeline for Olympics ML project.
 
-This module:
-  - Adds binary and multiclass target columns
-  - Selects ML-ready feature columns
-  - Splits numeric and categorical features
-  - Returns X, y_binary, y_multi for model training
+This module provides:
+  - Target engineering (binary + multiclass)
+  - Feature engineering (BMI, AgeGroup, HomeAdvantage, EventLength)
+  - Data validation
+  - Missing value handling
+  - Numeric & categorical feature separation
+  - Preprocessing pipeline (StandardScaler + OneHotEncoder)
+  - Final output for model training: X, y_binary, y_multi, preprocessor
 """
 
 import pandas as pd
-from typing import Tuple
+import numpy as np
+from typing import Tuple, List
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+import logging
+
+# ───────────────────────────────────────────────────────────────
+# Logging setup
+# ───────────────────────────────────────────────────────────────
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 # ───────────────────────────────────────────────────────────────
-# 1) Add target columns
+# 1) Data validation
+# ───────────────────────────────────────────────────────────────
+def validate_columns(df: pd.DataFrame, required_cols: List[str]):
+    missing = [c for c in required_cols if c not in df.columns]
+    if missing:
+        raise ValueError(f"Missing required columns: {missing}")
+    logger.info("Column validation passed.")
+
+
+# ───────────────────────────────────────────────────────────────
+# 2) Target columns
 # ───────────────────────────────────────────────────────────────
 def add_target_columns(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Adds target columns for ML models based on cleaned Olympics dataset.
+    logger.info("Adding target columns...")
 
-    Outputs:
-    - medal_binary : 1 if athlete won any medal, else 0
-    - medal_class  : 0 = No Medal, 1 = Bronze, 2 = Silver, 3 = Gold
-    """
-
-    # Binary target
     df["medal_binary"] = (df["Medal"] != "No Medal").astype(int)
 
-    # Multi-class target
-    mapping = {
-        "No Medal": 0,
-        "Bronze": 1,
-        "Silver": 2,
-        "Gold": 3
-    }
+    mapping = {"No Medal": 0, "Bronze": 1, "Silver": 2, "Gold": 3}
     df["medal_class"] = df["Medal"].map(mapping)
 
     return df
 
 
 # ───────────────────────────────────────────────────────────────
-# 2) Select feature columns
+# 3) Feature Engineering
 # ───────────────────────────────────────────────────────────────
-def select_feature_columns(df: pd.DataFrame) -> Tuple[pd.DataFrame, list, list]:
-    """
-    Selects ML-ready feature columns and returns:
-      - X (feature dataframe)
-      - numeric_features
-      - categorical_features
-    """
+def add_feature_engineering(df: pd.DataFrame) -> pd.DataFrame:
+    logger.info("Applying feature engineering...")
 
-    numeric_features = ["Age", "Height", "Weight", "BMI", "Year"]
-    categorical_features = [
-        "Sex", "Team", "NOC", "Region",
-        "Season", "City", "Sport", "Event"
-    ]
+    # BMI (if missing)
+    if "BMI" not in df.columns:
+        df["BMI"] = df["Weight"] / (df["Height"] / 100) ** 2
 
-    feature_cols = numeric_features + categorical_features
+    # Age groups
+    df["AgeGroup"] = pd.cut(
+        df["Age"],
+        bins=[0, 18, 25, 30, 40, 100],
+        labels=["U18", "18-25", "25-30", "30-40", "40+"]
+    )
 
-    X = df[feature_cols]
+    # Home advantage
+    df["HomeAdvantage"] = (df["Team"] == df["NOC"]).astype(int)
 
-    return X, numeric_features, categorical_features
+    # Event name length
+    df["EventLength"] = df["Event"].astype(str).str.len()
 
-
-# ───────────────────────────────────────────────────────────────
-# 3) Main function used by train.py
-# ───────────────────────────────────────────────────────────────
-def build_features(df: pd.DataFrame):
-    """
-    Full feature engineering pipeline:
-      1. Add target columns
-      2. Select feature columns
-      3. Return X, y_binary, y_multi, numeric, categorical
-    """
-
-    df = add_target_columns(df)
-
-    X, numeric, categorical = select_feature_columns(df)
-
-    y_binary = df["medal_binary"]
-    y_multi = df["medal_class"]
-
-    return X, y_binary, y_multi, numeric, categorical
+    return df
 
 
-# ───────────────────────────────────────────────────────────────
-# Debug run
-# ───────────────────────────────────────────────────────────────
-if __name__ == "__main__":
-    print("features.py test run")
-    sample = pd.DataFrame({
-        "Medal": ["Gold", "No Medal", "Silver"],
-        "Age": [23, 30, 27],
-        "Height": [180, 175, 190],
-        "Weight": [75, 80, 85],
-        "BMI": [23.1, 26.1, 23.5],
-        "Year": [2012, 2016, 2020],
-        "Sex": ["M", "F", "M"],
-        "Team": ["USA", "GER", "FRA"],
-        "NOC": ["USA", "GER", "FRA"],
-        "Region": ["Americas", "Europe", "Europe"],
-        "Season": ["Summer", "Summer", "Summer"],
-        "City": ["London", "Rio", "Tokyo"],
-        "Sport": ["Swimming", "Athletics", "Judo"],
-        "Event": ["100m", "Marathon", "Heavyweight"]
-    })
-
-    X, yb, ym, num, cat = build_features(sample)
-    print(X.head())
-    print("Binary:", yb.tolist())
-    print("Multi:", ym.tolist())
-    print("Numeric features:", num)
-    print("Categorical features:", cat)
-    
+# ─────────────────

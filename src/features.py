@@ -1,49 +1,117 @@
+"""
+features.py
+-----------
+Feature engineering + target creation for Olympics ML project.
+
+This module:
+  - Adds binary and multiclass target columns
+  - Selects ML-ready feature columns
+  - Splits numeric and categorical features
+  - Returns X, y_binary, y_multi for model training
+"""
+
 import pandas as pd
-
-def add_basic_features(df: pd.DataFrame) -> pd.DataFrame:
-    """Add simple numerical features."""
-    df["athletes_per_event"] = df["athletes"] / df["events"]
-    df["gdp_per_capita"] = df["gdp"] / df["population"]
-    return df
+from typing import Tuple
 
 
-def add_medal_features(df: pd.DataFrame) -> pd.DataFrame:
-    """Add medal-related engineered features."""
-    df["total_medals"] = df["gold"] + df["silver"] + df["bronze"]
-    df["medals_per_million"] = df["total_medals"] / (df["population"] / 1_000_000)
-    df["gold_ratio"] = df["gold"] / df["total_medals"].replace(0, 1)
-    return df
-
-
+# ───────────────────────────────────────────────────────────────
+# 1) Add target columns
+# ───────────────────────────────────────────────────────────────
 def add_target_columns(df: pd.DataFrame) -> pd.DataFrame:
-    """Create binary and multi-class target labels."""
-    df["medal_binary"] = (df["total_medals"] > 0).astype(int)
+    """
+    Adds target columns for ML models based on cleaned Olympics dataset.
 
-    def classify(row):
-        if row["gold"] > 0:
-            return "Gold"
-        elif row["silver"] > 0:
-            return "Silver"
-        elif row["bronze"] > 0:
-            return "Bronze"
-        return "None"
+    Outputs:
+    - medal_binary : 1 if athlete won any medal, else 0
+    - medal_class  : 0 = No Medal, 1 = Bronze, 2 = Silver, 3 = Gold
+    """
 
-    df["medal_class"] = df.apply(classify, axis=1)
+    # Binary target
+    df["medal_binary"] = (df["Medal"] != "No Medal").astype(int)
+
+    # Multi-class target
+    mapping = {
+        "No Medal": 0,
+        "Bronze": 1,
+        "Silver": 2,
+        "Gold": 3
+    }
+    df["medal_class"] = df["Medal"].map(mapping)
+
     return df
 
-def add_growth_feature(df: pd.DataFrame) -> pd.DataFrame:
-    """Calculate medal growth compared to previous Olympic cycle."""
-    df = df.sort_values(["country", "year"])
-    df["prev_total_medals"] = df.groupby("country")["total_medals"].shift(1)
-    df["medal_growth"] = df["total_medals"] - df["prev_total_medals"]
-    df["medal_growth"].fillna(0, inplace=True)
-    return df
+
+# ───────────────────────────────────────────────────────────────
+# 2) Select feature columns
+# ───────────────────────────────────────────────────────────────
+def select_feature_columns(df: pd.DataFrame) -> Tuple[pd.DataFrame, list, list]:
+    """
+    Selects ML-ready feature columns and returns:
+      - X (feature dataframe)
+      - numeric_features
+      - categorical_features
+    """
+
+    numeric_features = ["Age", "Height", "Weight", "BMI", "Year"]
+    categorical_features = [
+        "Sex", "Team", "NOC", "Region",
+        "Season", "City", "Sport", "Event"
+    ]
+
+    feature_cols = numeric_features + categorical_features
+
+    X = df[feature_cols]
+
+    return X, numeric_features, categorical_features
 
 
-def build_features(df: pd.DataFrame) -> pd.DataFrame:
-    """Full feature engineering pipeline."""
-    df = add_basic_features(df)
-    df = add_medal_features(df)
-    df = add_growth_feature(df)
+# ───────────────────────────────────────────────────────────────
+# 3) Main function used by train.py
+# ───────────────────────────────────────────────────────────────
+def build_features(df: pd.DataFrame):
+    """
+    Full feature engineering pipeline:
+      1. Add target columns
+      2. Select feature columns
+      3. Return X, y_binary, y_multi, numeric, categorical
+    """
+
     df = add_target_columns(df)
-    return df
+
+    X, numeric, categorical = select_feature_columns(df)
+
+    y_binary = df["medal_binary"]
+    y_multi = df["medal_class"]
+
+    return X, y_binary, y_multi, numeric, categorical
+
+
+# ───────────────────────────────────────────────────────────────
+# Debug run
+# ───────────────────────────────────────────────────────────────
+if __name__ == "__main__":
+    print("features.py test run")
+    sample = pd.DataFrame({
+        "Medal": ["Gold", "No Medal", "Silver"],
+        "Age": [23, 30, 27],
+        "Height": [180, 175, 190],
+        "Weight": [75, 80, 85],
+        "BMI": [23.1, 26.1, 23.5],
+        "Year": [2012, 2016, 2020],
+        "Sex": ["M", "F", "M"],
+        "Team": ["USA", "GER", "FRA"],
+        "NOC": ["USA", "GER", "FRA"],
+        "Region": ["Americas", "Europe", "Europe"],
+        "Season": ["Summer", "Summer", "Summer"],
+        "City": ["London", "Rio", "Tokyo"],
+        "Sport": ["Swimming", "Athletics", "Judo"],
+        "Event": ["100m", "Marathon", "Heavyweight"]
+    })
+
+    X, yb, ym, num, cat = build_features(sample)
+    print(X.head())
+    print("Binary:", yb.tolist())
+    print("Multi:", ym.tolist())
+    print("Numeric features:", num)
+    print("Categorical features:", cat)
+    

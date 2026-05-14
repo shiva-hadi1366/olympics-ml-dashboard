@@ -1,6 +1,6 @@
 # 🏅 Olympics ML Dashboard
 
-End-to-end Machine-Learning-Projekt zur Vorhersage olympischer Medaillenergebnisse – inklusive Streamlit-Dashboard zur interaktiven Exploration und Visualisierung.
+Ein vollständiges End-to-End-Machine-Learning-Projekt zur Vorhersage olympischer Medaillenergebnisse – inklusive Datenpipeline, Modelltraining, Evaluation und einem interaktiven Streamlit-Dashboard.
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.10-blue?style=for-the-badge" />
@@ -13,19 +13,22 @@ End-to-end Machine-Learning-Projekt zur Vorhersage olympischer Medaillenergebnis
 
 ## 🎯 Projektüberblick
 
-Dieses Repository enthält einen vollständigen ML-Workflow zur Vorhersage olympischer Medaillenergebnisse:
+Dieses Projekt entwickelt ein Machine-Learning-Modell zur Vorhersage von olympischen Medaillenergebnissen basierend auf historischen Athletendaten.  
+Es umfasst:
 
-- Datenbereinigung und Vorverarbeitung
-- Feature Engineering
-- Modelltraining (binär und mehrklassig)
-- Evaluation und Visualisierung
-- Streamlit-Dashboard für eine interaktive Analyse
+- Datenbereinigung & Feature Engineering  
+- Binäre Klassifikation (Medaille / keine Medaille)  
+- Mehrklassen-Klassifikation (Gold / Silber / Bronze / None)  
+- Modelltraining & Evaluation  
+- Interaktives Streamlit-Dashboard zur Visualisierung und Vorhersage  
+
+Das Projekt eignet sich ideal für Data-Science-Portfolios und produktionsnahe ML-Demonstrationen.
 
 ---
 
 ## 📊 Demo (Vorschau)
 
-> TODO: Ersetze den Platzhalter durch ein echtes GIF oder einen Screenshot der App.
+> **Hinweis:** Hier wird später ein echtes GIF oder Screenshot des Dashboards eingefügt.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/placeholder/demo.gif" width="650" />
@@ -38,95 +41,18 @@ Dieses Repository enthält einen vollständigen ML-Workflow zur Vorhersage olymp
 ```text
 olympics-ml-dashboard/
 │
-├── data/                   # Roh- und verarbeitete Datensätze
-├── notebooks/              # EDA, Experimente, Modellentwicklung
+├── data/                   # Roh- und bereinigte Datensätze
+├── notebooks/              # EDA, Experimente, Modelltests
 ├── src/
 │   ├── features.py         # Feature Engineering
-│   ├── train.py            # Trainings-Pipeline
+│   ├── train.py            # Trainingspipeline
 │   ├── evaluate.py         # Evaluationsskripte
 │   └── utils.py            # Hilfsfunktionen
 │
 ├── dashboard/
 │   └── app.py              # Streamlit-Dashboard
 │
+├── models/                 # Gespeicherte Modelle (.pkl)
+├── results/                # Confusion Matrices, Feature Importance, Plots
 ├── requirements.txt        # Abhängigkeiten
 └── README.md               # Dokumentation
-```
-
----
-
-## 🧠 Machine-Learning-Pipeline
-
-- ✅ Datenbereinigung
-- ✅ Feature Engineering
-- ✅ Binäre Klassifikation (Medaille / keine Medaille)
-- ✅ Mehrklassen-Klassifikation (Gold / Silber / Bronze)
-- ✅ Evaluation & Visualisierung
-
----
-
-## 🚀 Ausführen (lokal)
-
-### 1) Repository klonen
-
-```bash
-git clone https://github.com/shiva-hadi1366/olympics-ml-dashboard
-cd olympics-ml-dashboard
-```
-
-### 2) Abhängigkeiten installieren
-
-```bash
-pip install -r requirements.txt
-```
-
-### 3) Modell trainieren und evaluieren
-
-```bash
-python src/train.py
-python src/evaluate.py
-```
-
-### 4) Dashboard starten
-
-```bash
-streamlit run dashboard/app.py
-```
-
----
-
-## 📈 Ergebnisse (wird ergänzt)
-
-| Metrik                | Wert |
-|----------------------|------|
-| Accuracy (binär)     | —    |
-| Accuracy (mehrklassig) | —  |
-| Wichtigste Features  | —    |
-
----
-
-## 🛠 Tech-Stack
-
-- Python
-- Pandas / NumPy
-- Scikit-Learn
-- Streamlit
-- Matplotlib / Seaborn
-- Git & GitHub
-
----
-
-## 🔮 Nächste Schritte
-
-- Hyperparameter-Tuning
-- Modell-Erklärbarkeit (z. B. SHAP)
-- Deployment (z. B. Streamlit Cloud)
-- API-Endpunkt für Vorhersagen
-
----
-
-## 👤 Autor
-
-**Mohammadhadi Shiva**  
-Data-Science-Trainee — Deutschland  
-GitHub: https://github.com/shiva-hadi1366

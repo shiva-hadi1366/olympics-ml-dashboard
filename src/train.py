@@ -110,6 +110,46 @@ def save_feature_importance(model, feature_names, output_path="results/feature_i
 
     print(f"✔ Feature Importance gespeichert unter: {output_path}")
 
+def save_feature_importance_multiclass(model, feature_names, output_dir="results"):
+    """Speichert Feature Importance für ein Multiklassen-LogisticRegression-Modell."""
+
+    print("📊 Speichere Feature Importance (Multiclass)...")
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    pre = model.named_steps["preprocess"]
+    clf = model.named_steps["clf"]
+
+    # Numerische Features
+    num_features = pre.transformers_[0][2]
+
+    # OneHotEncoder Features
+    cat_encoder = pre.transformers_[1][1]
+    cat_features = cat_encoder.get_feature_names_out(pre.transformers_[1][2])
+
+    all_features = list(num_features) + list(cat_features)
+
+    # Für jede Klasse ein Diagramm
+    class_names = ["No Medal", "Bronze", "Silver", "Gold"]
+
+    for idx, class_name in enumerate(class_names):
+        importances = clf.coef_[idx]
+
+        fi = pd.DataFrame({
+            "Feature": all_features,
+            "Importance": importances
+        }).sort_values(by="Importance", ascending=False)
+
+        plt.figure(figsize=(10, 8))
+        sns.barplot(x="Importance", y="Feature", data=fi.head(20), palette="viridis")
+        plt.title(f"Feature Importance – Klasse: {class_name}")
+        plt.tight_layout()
+
+        out_path = os.path.join(output_dir, f"feature_importance_{class_name.replace(' ', '_')}.png")
+        plt.savefig(out_path)
+        plt.close()
+
+        print(f"✔ Feature Importance gespeichert unter: {out_path}")
 
 
 # ---------------------------------------------------------------

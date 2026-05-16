@@ -29,11 +29,11 @@ Hauptkomponenten
 
 📊 Demo (Vorschau)
 <p align="center">
-<img src="Screenshot 2026-05-16 140643.png" width="650" />
+<img src="images/Screenshot 2026-05-16 140643.png" width="650" />
 </p>
 
 <p align="center">
-<img src="Screenshot 2026-05-16 140654.png" width="650" />
+<img src="images/Screenshot 2026-05-16 140654.png" width="650" />
 </p>
 
 Screenshots aus dem laufenden Streamlit‑Dashboard.

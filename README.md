@@ -1,58 +1,118 @@
-# 🏅 Olympics ML Dashboard
-
-Ein vollständiges End-to-End-Machine-Learning-Projekt zur Vorhersage olympischer Medaillenergebnisse – inklusive Datenpipeline, Modelltraining, Evaluation und einem interaktiven Streamlit-Dashboard.
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.10-blue?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/ML-Pipeline-green?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Streamlit-Dashboard-red?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Status-Active-success?style=for-the-badge" />
-</p>
-
----
-
-## 🎯 Projektüberblick
-
-Dieses Projekt entwickelt ein Machine-Learning-Modell zur Vorhersage von olympischen Medaillenergebnissen basierend auf historischen Athletendaten.  
-Es umfasst:
-
-- Datenbereinigung & Feature Engineering  
-- Binäre Klassifikation (Medaille / keine Medaille)  
-- Mehrklassen-Klassifikation (Gold / Silber / Bronze / None)  
-- Modelltraining & Evaluation  
-- Interaktives Streamlit-Dashboard zur Visualisierung und Vorhersage  
-
-Das Projekt eignet sich ideal für Data-Science-Portfolios und produktionsnahe ML-Demonstrationen.
-
----
-
-## 📊 Demo (Vorschau)
-
-> **Hinweis:** Hier wird später ein echtes GIF oder Screenshot des Dashboards eingefügt.
+🏅 Olympics ML Dashboard
+Ein vollständiges End-to-End‑Machine‑Learning‑Projekt zur Vorhersage olympischer Medaillenergebnisse – inklusive Datenpipeline, Feature Engineering, Modelltraining, Evaluation und einem interaktiven Streamlit‑Dashboard.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/placeholder/demo.gif" width="650" />
+<img src="https://img.shields.io/badge/Python-3.10-blue?style=for-the-badge" />
+<img src="https://img.shields.io/badge/Machine%20Learning-Pipeline-green?style=for-the-badge" />
+<img src="https://img.shields.io/badge/Streamlit-Dashboard-red?style=for-the-badge" />
+<img src="https://img.shields.io/badge/Status-Active-success?style=for-the-badge" />
 </p>
 
----
+🎯 Projektüberblick
+Dieses Projekt entwickelt ein Machine‑Learning‑System zur Vorhersage von olympischen Medaillenergebnissen basierend auf historischen Athletendaten (1896–2016).
+Es kombiniert moderne Data‑Science‑Techniken mit einem interaktiven Dashboard zur explorativen Analyse und Modellvorhersage.
 
-## 📂 Projektstruktur
+Hauptkomponenten:
 
-```text
+🧹 Datenbereinigung & Feature Engineering
+
+🤖 Binäre Klassifikation (Medaille vs. keine Medaille)
+
+🥇 Mehrklassen‑Modell (Gold / Silber / Bronze / None)
+
+📈 Modelltraining & Evaluation
+
+🖥️ Interaktives Streamlit‑Dashboard
+
+📊 Explorative Analyse (Athleten, Länder, Sportarten)
+
+📊 Demo (Vorschau)
+Hinweis: Hier kann später ein GIF oder Screenshot eingefügt werden.
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/placeholder/demo.gif" width="650" />
+</p>
+
+📂 Projektstruktur
+text
 olympics-ml-dashboard/
 │
-├── data/                   # Roh- und bereinigte Datensätze
-├── notebooks/              # EDA, Experimente, Modelltests
+├── data/                     # Roh- und bereinigte Datensätze
+│   ├── raw/
+│   └── cleaned/
+│
+├── notebooks/                # EDA, Experimente, Modelltests
+│
 ├── src/
-│   ├── features.py         # Feature Engineering
-│   ├── train.py            # Trainingspipeline
-│   ├── evaluate.py         # Evaluationsskripte
-│   └── utils.py            # Hilfsfunktionen
+│   ├── features.py           # Feature Engineering
+│   ├── train.py              # Trainingspipeline
+│   ├── evaluate.py           # Evaluationsskripte
+│   └── utils.py              # Hilfsfunktionen
+│
+├── models/                   # Gespeicherte Modelle (.pkl)
+│
+├── results/                  # Confusion Matrices, Feature Importance, Plots
 │
 ├── dashboard/
-│   └── app.py              # Streamlit-Dashboard
+│   ├── app.py                # Haupt-Dashboard
+│   └── pages/                # Multi-Page Streamlit Seiten
+│       ├── Athlete_Explorer.py
+│       ├── Country_Insights.py
+│       ├── ML_Prediction.py
+│       └── Overview.py
 │
-├── models/                 # Gespeicherte Modelle (.pkl)
-├── results/                # Confusion Matrices, Feature Importance, Plots
-├── requirements.txt        # Abhängigkeiten
-└── README.md               # Dokumentation
+├── requirements.txt          # Abhängigkeiten
+└── README.md                 # Dokumentation
+🧠 Machine‑Learning‑Pipeline
+1) Datenvorbereitung
+Entfernen fehlender Werte
+
+Normalisierung & Skalierung
+
+Encoding kategorialer Variablen
+
+Feature‑Engineering (Alter, BMI, Event‑Schwierigkeit, Länderstatistiken)
+
+2) Modellarchitektur
+Stage 1: Binäres Modell → Medaille vs. keine Medaille
+
+Stage 2: Multiclass‑Modell → Gold / Silber / Bronze / None
+
+3) Evaluation
+Accuracy, F1‑Score, ROC‑AUC
+
+Confusion Matrix
+
+Feature Importance
+
+Cross‑Validation
+
+🖥️ Streamlit‑Dashboard
+Das Dashboard bietet:
+
+🔍 Athlete Explorer – Filter nach Name, Land, Sport
+
+🌍 Country Insights – Länderstatistiken & Medaillenverteilung
+
+🧠 ML Prediction – Modellvorhersage basierend auf Eingaben
+
+📊 Overview – Überblick über Athleten, Nationen & Sportarten
+
+Starten:
+
+bash
+streamlit run dashboard/app.py
+🚀 Installation & Setup
+bash
+git clone https://github.com/shiva-hadi1366/olympics-ml-dashboard.git
+cd olympics-ml-dashboard
+pip install -r requirements.txt
+streamlit run dashboard/app.py
+📈 Beispielergebnisse
+(Hier können später Confusion Matrix, Feature Importance oder Plots eingefügt werden.)
+
+👤 Autor
+Mohammadhadi Shiva  
+Data Science Trainee | Machine Learning | Python | Streamlit
+📍 Deutschland
+🔗 GitHub: https://github.com/shiva-hadi1366 (github.com in Bing)
